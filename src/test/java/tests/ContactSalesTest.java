@@ -20,10 +20,11 @@ public class ContactSalesTest extends BaseTest {
         String emp = ExcelUtil.getData(1,6);
         String comments = ExcelUtil.getData(1,7);
 
+        page.acceptCookiesIfPresent();
         page.fillForm(name, email, phone, company, job, comments);
         page.selectDropDowns(country,emp);
         page.clickCaptchaCheckbox();
-        page.waitForCaptcha();
+        page.waitForCaptchaToBeSolved();
         page.submitForm();
     }
 }

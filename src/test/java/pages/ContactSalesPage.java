@@ -50,6 +50,24 @@ public class ContactSalesPage {
     @FindBy(xpath = "//input[@value = 'Contact Sales']")
     WebElement submit;
 
+    public void acceptCookiesIfPresent() {
+        try {
+            WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(5));
+
+            WebElement acceptBtn = wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(text(),'Allow all')]")
+                    )
+            );
+
+            acceptBtn.click();
+            System.out.println("Cookies accepted");
+
+        } catch (Exception e) {
+            System.out.println("No cookies popup displayed");
+        }
+    }
+
     public  void fillForm(String name, String emailID, String phoneNo, String companyName, String job, String commentText) {
         fullName.sendKeys(name);
         email.sendKeys(emailID);
@@ -75,7 +93,7 @@ public class ContactSalesPage {
         selectDropdownByExcelValue(country, countryName);
         selectDropdownByExcelValue(employees,employeeNumber);
     }
-
+    /*
     public void clickCaptchaCheckbox() {
             WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(20));
             wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@title='reCAPTCHA']")));
@@ -86,6 +104,8 @@ public class ContactSalesPage {
 //        }
         }
 
+     */
+    /*
     public void waitForCaptcha() {
         try {
             System.out.println("Solve Captcha");
@@ -96,6 +116,32 @@ public class ContactSalesPage {
         catch (Exception e) {
             System.out.println("Captcha solved or not detected");
         }
+    }
+    */
+    public void clickCaptchaCheckbox() {
+        try {
+            WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(30));
+
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+                    By.xpath("//iframe[@title='reCAPTCHA']")));
+
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("div.recaptcha-checkbox-border")));
+
+            checkbox.click();
+
+            wd.switchTo().defaultContent();
+
+        } catch (Exception e) {
+            System.out.println("Captcha not clickable or already solved");
+            wd.switchTo().defaultContent();
+        }
+    }
+
+    public void waitForCaptchaToBeSolved() throws InterruptedException {
+        System.out.println("Please solve the CAPTCHA manually...");
+        Thread.sleep(60000);   // 60 seconds or whatever you need
+        wd.switchTo().defaultContent();
     }
 
     public  void submitForm() {
