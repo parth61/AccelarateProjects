@@ -1,5 +1,7 @@
 package utils;
 
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -12,7 +14,8 @@ public class ExcelUtil {
         FileInputStream fis = new FileInputStream("testdata/ContactSales.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         XSSFSheet sheet = workbook.getSheetAt(0);
-        String data = sheet.getRow(row).getCell(col).toString();
+        DataFormatter format = new DataFormatter();
+        String data = format.formatCellValue(sheet.getRow(row).getCell(col));
         workbook.close();
         return data;
     }

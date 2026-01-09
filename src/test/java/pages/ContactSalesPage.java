@@ -130,7 +130,7 @@ public class ContactSalesPage {
 
             checkbox.click();
 
-            wd.switchTo().defaultContent();
+           wd.switchTo().defaultContent();
 
         } catch (Exception e) {
             System.out.println("Captcha not clickable or already solved");
@@ -139,9 +139,12 @@ public class ContactSalesPage {
     }
 
     public void waitForCaptchaToBeSolved() throws InterruptedException {
-        System.out.println("Please solve the CAPTCHA manually...");
-        Thread.sleep(60000);   // 60 seconds or whatever you need
-        wd.switchTo().defaultContent();
+        try{
+            System.out.println("Please solve the CAPTCHA manually...");
+            Thread.sleep(60000);
+        } catch (Exception e) {
+            throw new RuntimeException("Captcha not solved in time");
+        }
     }
 
     public  void submitForm() {
