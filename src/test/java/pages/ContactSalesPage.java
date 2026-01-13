@@ -15,8 +15,10 @@ import java.util.List;
 public class ContactSalesPage {
 
     WebDriver wd;
+    WebDriverWait wait;
     public ContactSalesPage(WebDriver wd) {
         this.wd = wd;
+        this.wait = new WebDriverWait(wd,Duration.ofSeconds(30));
         PageFactory.initElements(wd, this);
     }
 
@@ -44,16 +46,14 @@ public class ContactSalesPage {
     @FindBy(name = "Comment")
     WebElement comment;
 
-    @FindBy(xpath = "//div[@class='recaptcha-checkbox-border']")
-    WebElement captcha;
-
     @FindBy(xpath = "//input[@value = 'Contact Sales']")
     WebElement submit;
 
+    @FindBy(xpath = "//h1[contains(text(), 'Thank')]")
+    WebElement successMessage;
+
     public void acceptCookiesIfPresent() {
         try {
-            WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(5));
-
             WebElement acceptBtn = wait.until(
                     ExpectedConditions.elementToBeClickable(
                             By.xpath("//button[contains(text(),'Allow all')]")
@@ -93,62 +93,38 @@ public class ContactSalesPage {
         selectDropdownByExcelValue(country, countryName);
         selectDropdownByExcelValue(employees,employeeNumber);
     }
-    /*
-    public void clickCaptchaCheckbox() {
-            WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(20));
-            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@title='reCAPTCHA']")));
-            captcha.click();
-//        catch (Exception e) {
-//            System.out.println("Captcha checkbox not found or already solved");
-//            wd.switchTo().defaultContent();
-//        }
-        }
 
-     */
-    /*
-    public void waitForCaptcha() {
-        try {
-            System.out.println("Solve Captcha");
-            WebDriverWait wait = new WebDriverWait(wd, Duration.ofMinutes(2));
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//table[@class = 'rc-imageselect-table-33']")));
-            wd.switchTo().defaultContent();
-        }
-        catch (Exception e) {
-            System.out.println("Captcha solved or not detected");
-        }
-    }
-    */
     public void clickCaptchaCheckbox() {
-        try {
-            WebDriverWait wait = new WebDriverWait(wd, Duration.ofSeconds(30));
-
             wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
                     By.xpath("//iframe[@title='reCAPTCHA']")));
 
             WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("div.recaptcha-checkbox-border")));
-
+                    By.xpath("//*[@class='recaptcha-checkbox-border']")));
             checkbox.click();
 
-           wd.switchTo().defaultContent();
-
-        } catch (Exception e) {
-            System.out.println("Captcha not clickable or already solved");
-            wd.switchTo().defaultContent();
         }
-    }
+
 
     public void waitForCaptchaToBeSolved() throws InterruptedException {
         try{
-            System.out.println("Please solve the CAPTCHA manually...");
-            Thread.sleep(60000);
+            wait = new WebDriverWait(wd,Duration.ofSeconds(60));
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@aria-checked='true']")));
+            System.out.println("Captcha is Solved");
+            wd.switchTo().defaultContent();
+
         } catch (Exception e) {
-            throw new RuntimeException("Captcha not solved in time");
+            System.out.println("Captcha not solved in time");
         }
     }
 
     public  void submitForm() {
         submit.click();
+    }
+
+    public void isSubmissionSuccessful() {
+        wait.until(ExpectedConditions.visibilityOf(successMessage));
+        System.out.println(wd.getTitle());
+
     }
 
 }

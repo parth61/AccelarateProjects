@@ -1,7 +1,6 @@
 package base;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -21,8 +20,8 @@ public class BaseTest {
 
     @AfterClass
     public void tearDown() throws InterruptedException {
-        Thread.sleep(5000);
-        wd.quit();
+            wd.quit();
+
     }
 
 }
