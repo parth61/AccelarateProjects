@@ -1,15 +1,11 @@
 package utils;
 
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
+import org.apache.poi.ss.usermodel.*;
 import java.io.FileInputStream;
 
 public class ExcelUtil {
 
-    public static Object[][] getExcelData(String sheetName) throws Exception {
+    public static Object[][] getExcelData(String sheetName) {
         try {
             String path = System.getProperty("user.dir") + "/testdata/ContactSales.xlsx";
             FileInputStream fis = new FileInputStream(path);

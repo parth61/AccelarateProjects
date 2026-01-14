@@ -1,13 +1,8 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
@@ -22,43 +17,30 @@ public class ContactSalesPage {
         PageFactory.initElements(wd, this);
     }
 
-    @FindBy(name = "FullName")
-    WebElement fullName;
+    @FindBy(name = "FullName") WebElement fullName;
 
-    @FindBy(name = "Email")
-    WebElement email;
+    @FindBy(name = "Email") WebElement email;
 
-    @FindBy(name = "Contact")
-    WebElement phone;
+    @FindBy(name = "Contact") WebElement phone;
 
-    @FindBy(name = "Country")
-    WebElement country;
+    @FindBy(name = "Country") WebElement country;
 
-    @FindBy(name = "CompanyName")
-    WebElement company;
+    @FindBy(name = "CompanyName") WebElement company;
 
-    @FindBy(name = "JobTitle")
-    WebElement jobTitle;
+    @FindBy(name = "JobTitle") WebElement jobTitle;
 
-    @FindBy(name = "NoOfEmployees")
-    WebElement employees;
+    @FindBy(name = "NoOfEmployees") WebElement employees;
 
-    @FindBy(name = "Comment")
-    WebElement comment;
+    @FindBy(name = "Comment") WebElement comment;
 
-    @FindBy(xpath = "//input[@value = 'Contact Sales']")
-    WebElement submit;
+    @FindBy(xpath = "//input[@value = 'Contact Sales']") WebElement submit;
 
-    @FindBy(xpath = "//h1[contains(text(), 'Thank')]")
-    WebElement successMessage;
+    @FindBy(xpath = "//h1[contains(text(), 'Thank')]") WebElement successMessage;
 
     public void acceptCookiesIfPresent() {
         try {
-            WebElement acceptBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(
-                            By.xpath("//button[contains(text(),'Allow all')]")
-                    )
-            );
+            WebElement acceptBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(text(),'Allow all')]")));
 
             acceptBtn.click();
             System.out.println("Cookies accepted");
@@ -68,7 +50,8 @@ public class ContactSalesPage {
         }
     }
 
-    public  void fillForm(String name, String emailID, String phoneNo, String companyName, String job, String commentText) {
+    public  void fillForm(String name, String emailID, String phoneNo,
+                          String companyName, String job, String commentText) {
         fullName.sendKeys(name);
         email.sendKeys(emailID);
         phone.sendKeys(phoneNo);
@@ -77,21 +60,21 @@ public class ContactSalesPage {
         comment.sendKeys(commentText);
     }
 
-    public  void selectDropdownByExcelValue(WebElement element, String value) {
+    public  void selectDropdown(WebElement element, String value) {
         Select select = new Select(element);
         List<WebElement> options = select.getOptions();
 
         for (WebElement option : options){
-            if (option.getText().trim().equalsIgnoreCase(value.trim())) {
-                select.selectByVisibleText(option.getText());
+            if (option.getText().equalsIgnoreCase(value)) {
+                option.click();
                 break;
             }
         }
     }
 
-    public  void selectDropDowns(String countryName, String employeeNumber) {
-        selectDropdownByExcelValue(country, countryName);
-        selectDropdownByExcelValue(employees,employeeNumber);
+    public  void selectDropDownByValue(String countryName, String employeeNumber) {
+        selectDropdown(country, countryName);
+        selectDropdown(employees,employeeNumber);
     }
 
     public void clickCaptchaCheckbox() {
@@ -105,10 +88,11 @@ public class ContactSalesPage {
         }
 
 
-    public void waitForCaptchaToBeSolved() throws InterruptedException {
+    public void waitForCaptchaToBeSolved() {
         try{
             wait = new WebDriverWait(wd,Duration.ofSeconds(60));
-            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@aria-checked='true']")));
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//span[@aria-checked='true']")));
             System.out.println("Captcha is Solved");
             wd.switchTo().defaultContent();
 

@@ -2,8 +2,7 @@ package base;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 
@@ -19,8 +18,10 @@ public class BaseTest {
     }
 
     @AfterClass
-    public void tearDown() throws InterruptedException {
-            wd.quit();
+    public void tearDown() {
+            if (wd != null){
+                wd.quit();
+            }
 
     }
 
